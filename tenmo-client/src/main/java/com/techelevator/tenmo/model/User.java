@@ -1,11 +1,15 @@
 package com.techelevator.tenmo.model;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 
 public class User {
 
     private int id;
     private String username;
+    private BigDecimal balance;
+
 
     public int getId() {
         return id;
