@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.services;
 
+import com.techelevator.tenmo.model.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class AccountService {
 
@@ -31,6 +33,18 @@ public class AccountService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);
         return new HttpEntity<>(headers);
+    }
+
+    public void listUsers() {
+        List<User> users = restTemplate.exchange(baseUrl + "/accounts", HttpMethod.GET, makeAuthEntity(), List.class).getBody();
+
+        System.out.println("-------------------------------------------");
+        System.out.println("User ID        User Name");
+        System.out.println("-------------------------------------------");
+        for(User user : users) {
+            System.out.println(user.getId() + "           " + user.getUsername());
+        }
+        System.out.println("---------");
     }
 
 }

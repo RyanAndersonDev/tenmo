@@ -90,14 +90,4 @@ public class ConsoleService {
         System.out.println("An error occurred. Check the log for details.");
     }
 
-    public void listUsers(List<User> users) {
-        System.out.println("-------------------------------------------");
-        System.out.println("User ID        User Name");
-        System.out.println("-------------------------------------------");
-        for(User user : users) {
-            System.out.println(user.getId() + "           " + user.getUsername());
-        }
-        System.out.println("---------");
-    }
-
 }

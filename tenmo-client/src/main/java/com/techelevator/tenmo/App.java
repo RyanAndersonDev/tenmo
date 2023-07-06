@@ -113,7 +113,7 @@ public class App {
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
-		//consoleService.listUsers();
+		accountService.listUsers();
 	}
 
 }
