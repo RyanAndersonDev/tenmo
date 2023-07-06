@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,20 @@ public class JdbcUserDao implements UserDao {
             users.add(user);
         }
 
+        return users;
+    }
+
+    public List<User> findExclusiveAll(Principal principal) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT user_id, username " +
+                "FROM tenmo_user " +
+                "WHILE user_id != ?;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, findIdByUsername(principal.getName()));
+        while(results.next()) {
+            User user = mapRowToUser(results);
+            users.add(user);
+        }
         return users;
     }
 

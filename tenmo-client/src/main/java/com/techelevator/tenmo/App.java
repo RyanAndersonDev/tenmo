@@ -92,7 +92,7 @@ public class App {
     }
 
 	private void viewCurrentBalance() {
-         BigDecimal balance = accountService.getBalance();
+        BigDecimal balance = accountService.getBalance();
         System.out.println("Your current balance is: $" + balance);
 	}
 
@@ -108,12 +108,12 @@ public class App {
 
 	private void sendBucks() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
-		
+		consoleService.listUsers();
 	}
 
 }
