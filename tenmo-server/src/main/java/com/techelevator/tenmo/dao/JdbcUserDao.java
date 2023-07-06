@@ -65,9 +65,9 @@ public class JdbcUserDao implements UserDao {
 
     public List<User> findExclusiveAll(Principal principal) {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT user_id, username " +
+        String sql = "SELECT user_id, username, password_hash " +
                 "FROM tenmo_user " +
-                "WHILE user_id != ?;";
+                "WHERE user_id != ?;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, findIdByUsername(principal.getName()));
         while(results.next()) {
