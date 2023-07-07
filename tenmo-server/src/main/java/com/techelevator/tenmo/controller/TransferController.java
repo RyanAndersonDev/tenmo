@@ -29,11 +29,11 @@ public class TransferController {
     }
 
     @RequestMapping(path = "/pay", method = RequestMethod.POST)
-    public void sendTransfer(@RequestBody TransferDto transferDto, Principal principal){
+    public boolean sendTransfer(@RequestBody TransferDto transferDto, Principal principal){
 
         int principalUserId = userDao.findIdByUsername(principal.getName());
-        Account pricipalAccount = accountDao.getAccountByUserId(principalUserId);
-        int principalAccountId = pricipalAccount.getAccountId();
+        Account principalAccount = accountDao.getAccountByUserId(principalUserId);
+        int principalAccountId = principalAccount.getAccountId();
 
         int accountToId = transferDto.getAccountToId();
         BigDecimal transferAmount = transferDto.getAmount();
@@ -41,5 +41,6 @@ public class TransferController {
         transferDao.createTransfer(false, principalAccountId, accountToId, transferAmount);
         transferDao.updateSenderBalance(transferAmount, accountToId);
         transferDao.updateRecipientBalance(transferAmount, principalAccountId);
+        return true;
     }
 }

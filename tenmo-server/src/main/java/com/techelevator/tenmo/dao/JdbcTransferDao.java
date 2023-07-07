@@ -34,7 +34,7 @@ public class JdbcTransferDao implements TransferDao{
         jdbcTemplate.queryForRowSet(sql, transferAmount, accountId);
     }
 
-    public boolean createTransfer(boolean isRequest, int accountFromId, int accountToId, BigDecimal amount){
+    public boolean createTransfer(boolean isRequest, int accountFromId, int accountToId, BigDecimal amount) {
         String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
                 "VALUES (?,?,?,?,?) " +
                 "RETURNING transfer_id;";
@@ -46,9 +46,11 @@ public class JdbcTransferDao implements TransferDao{
         }
         Integer transferId = jdbcTemplate.update(sql, Integer.class, transferTypeId, transferStatusId, accountFromId, accountToId, amount);
 
-        if (transferId == null){
+        if (transferId == null) {
             return false;
-        } else return true;
+        } else {
+            return true;
+        }
     }
 
 

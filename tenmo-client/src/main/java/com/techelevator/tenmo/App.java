@@ -1,10 +1,12 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.TransferInput;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
+import com.techelevator.tenmo.services.TransferService;
 
 import java.math.BigDecimal;
 
@@ -14,6 +16,7 @@ public class App {
 
     private final ConsoleService consoleService = new ConsoleService();
     private final AccountService accountService = new AccountService();
+    private final TransferService transferService = new TransferService();
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
 
     private AuthenticatedUser currentUser;
@@ -108,7 +111,11 @@ public class App {
 
 	private void sendBucks() {
 		// TODO Auto-generated method stub
-
+        accountService.listUsers();
+        int recipientId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): " );
+        BigDecimal sendAmount = consoleService.promptForBigDecimal("Enter amount: $");
+        TransferInput input = new TransferInput(recipientId, sendAmount);
+        transferService.pay(input);
 	}
 
 	private void requestBucks() {
