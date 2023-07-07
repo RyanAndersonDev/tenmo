@@ -3,18 +3,10 @@ package com.techelevator.tenmo.model;
 import java.math.BigDecimal;
 
 public class TransferDto {
-
-    /*
-    {
-        accountToId : 1001
-    }
-
-     */
-
     private int accountToId;
     private BigDecimal amount;
 
-    public int getAccountToId() {
+    public int getAccountToUserId() {
         return accountToId;
     }
 

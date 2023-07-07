@@ -24,33 +24,26 @@ public class JdbcTransferDao implements TransferDao{
         String sql = "UPDATE account " +
             "SET balance = balance + ? " +
             "WHERE account_id = ?;";
-        jdbcTemplate.queryForRowSet(sql, transferAmount, accountId);
+        jdbcTemplate.update(sql, transferAmount, accountId);
     }
 
     public void updateSenderBalance(BigDecimal transferAmount, int accountId) {
         String sql = "UPDATE account " +
                 "SET balance = balance - ? " +
                 "WHERE account_id = ?;";
-        jdbcTemplate.queryForRowSet(sql, transferAmount, accountId);
+        jdbcTemplate.update(sql, transferAmount, accountId);
     }
 
-    public boolean createTransfer(boolean isRequest, int accountFromId, int accountToId, BigDecimal amount) {
+    public void createTransfer(boolean isRequest, int accountFromId, int accountToId, BigDecimal amount) {
         String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
-                "VALUES (?,?,?,?,?) " +
-                "RETURNING transfer_id;";
+                "VALUES (?,?,?,?,?); ";
         int transferTypeId = 2;
         int transferStatusId = 2;
         if(isRequest){
             transferTypeId = 1;
             transferStatusId = 1;
         }
-        Integer transferId = jdbcTemplate.update(sql, Integer.class, transferTypeId, transferStatusId, accountFromId, accountToId, amount);
-
-        if (transferId == null) {
-            return false;
-        } else {
-            return true;
-        }
+       jdbcTemplate.update(sql, transferTypeId, transferStatusId, accountFromId, accountToId, amount);
     }
 
 

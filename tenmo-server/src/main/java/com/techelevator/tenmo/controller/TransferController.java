@@ -35,12 +35,17 @@ public class TransferController {
         Account principalAccount = accountDao.getAccountByUserId(principalUserId);
         int principalAccountId = principalAccount.getAccountId();
 
-        int accountToId = transferDto.getAccountToId();
+        int accountToUserId = transferDto.getAccountToUserId();
+        Account recipientAccount = accountDao.getAccountByUserId(accountToUserId);
+        int recipientAccountId = recipientAccount.getAccountId();
+
         BigDecimal transferAmount = transferDto.getAmount();
 
-        transferDao.createTransfer(false, principalAccountId, accountToId, transferAmount);
-        transferDao.updateSenderBalance(transferAmount, accountToId);
-        transferDao.updateRecipientBalance(transferAmount, principalAccountId);
+        transferDao.createTransfer(false, principalAccountId, recipientAccountId, transferAmount);
+        transferDao.updateSenderBalance(transferAmount, principalAccountId);
+        transferDao.updateRecipientBalance(transferAmount, recipientAccountId);
+
+        // Add better exception handling later ??
         return true;
     }
 }

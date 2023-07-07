@@ -3,7 +3,6 @@ package com.techelevator.tenmo.model;
 import java.math.BigDecimal;
 
 public class TransferInput {
-
     private int accountToId;
     private BigDecimal amount;
 
