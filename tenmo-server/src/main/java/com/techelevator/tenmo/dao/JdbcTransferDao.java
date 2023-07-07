@@ -35,7 +35,9 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     public boolean createTransfer(boolean isRequest, int accountFromId, int accountToId, BigDecimal amount){
-        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES ?,?,?,?,? RETURNING transfer_id;";
+        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
+                "VALUES (?,?,?,?,?) " +
+                "RETURNING transfer_id;";
         int transferTypeId = 2;
         int transferStatusId = 2;
         if(isRequest){

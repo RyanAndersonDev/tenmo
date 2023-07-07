@@ -42,5 +42,4 @@ public class TransferController {
         transferDao.updateSenderBalance(transferAmount, accountToId);
         transferDao.updateRecipientBalance(transferAmount, principalAccountId);
     }
-  //  implement
 }
