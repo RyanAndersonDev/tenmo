@@ -21,6 +21,8 @@ public class Transfer {
         this.amount = amount;
     }
 
+    public Transfer(){}
+
     public int getTransferId() {
         return transferId;
     }
