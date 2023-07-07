@@ -36,7 +36,7 @@ public class AccountService {
     }
 
     public void listUsers() {
-        List<User> users = restTemplate.exchange(baseUrl + "/accounts", HttpMethod.GET, makeAuthEntity(), List.class).getBody();
+        User[] users = restTemplate.exchange(baseUrl + "/accounts", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
 
         System.out.println("-------------------------------------------");
         System.out.println("User ID        User Name");
