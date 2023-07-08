@@ -20,10 +20,6 @@ public class AccountService {
         this.authToken = authToken;
     }
 
-    public String getAuthToken() {
-        return authToken;
-    }
-
     public BigDecimal getBalance(){
         BigDecimal balance = new BigDecimal("0");
         ResponseEntity<BigDecimal> response = restTemplate.exchange(baseUrl + "/balance", HttpMethod.GET, makeAuthEntity(), BigDecimal.class);

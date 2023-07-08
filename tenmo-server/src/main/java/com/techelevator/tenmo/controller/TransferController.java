@@ -5,6 +5,7 @@ import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.JdbcTransferDao;
 import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.dao.UserDao;
+import com.techelevator.tenmo.exception.BalanceException;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.TransferDto;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class TransferController {
     }
 
     @RequestMapping(path = "/pay", method = RequestMethod.POST)
-    public boolean sendTransfer(@RequestBody TransferDto transferDto, Principal principal){
+    public boolean sendTransfer(@RequestBody TransferDto transferDto, Principal principal) {
 
         int principalUserId = userDao.findIdByUsername(principal.getName());
         Account principalAccount = accountDao.getAccountByUserId(principalUserId);
@@ -41,9 +42,13 @@ public class TransferController {
 
         BigDecimal transferAmount = transferDto.getAmount();
 
-        transferDao.createTransfer(false, principalAccountId, recipientAccountId, transferAmount);
-        transferDao.updateSenderBalance(transferAmount, principalAccountId);
-        transferDao.updateRecipientBalance(transferAmount, recipientAccountId);
+        if(principalAccount.getBalance().compareTo(transferAmount) >= 0 && transferAmount.compareTo(new BigDecimal("0")) > 0) {
+            transferDao.createTransfer(false, principalAccountId, recipientAccountId, transferAmount);
+            transferDao.updateSenderBalance(transferAmount, principalAccountId);
+            transferDao.updateRecipientBalance(transferAmount, recipientAccountId);
+        } else {
+            throw new BalanceException("Invalid funds");
+        }
 
         // Add better exception handling later ??
         return true;
