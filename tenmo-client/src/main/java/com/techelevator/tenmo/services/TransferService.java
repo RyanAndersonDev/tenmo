@@ -8,6 +8,7 @@ public class TransferService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final String baseUrl = "http://localhost:8080";
+    private String authToken = null;
 
 
     public void pay(TransferInput transferInput) {
@@ -17,9 +18,12 @@ public class TransferService {
     public HttpEntity<TransferInput> makePayEntity(TransferInput transferInput) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        String token = new AccountService().getAuthToken();
-        headers.set("Authorization", "Bearer "+token);
+        headers.setBearerAuth(authToken);
         return new HttpEntity<>(transferInput, headers);
+    }
+
+    public void setAuthToken(String authToken){
+        this.authToken = authToken;
     }
 
 }
