@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JdbcTransferDao implements TransferDao{
@@ -46,9 +48,18 @@ public class JdbcTransferDao implements TransferDao{
        jdbcTemplate.update(sql, transferTypeId, transferStatusId, accountFromId, accountToId, amount);
     }
 
-
-    public void requestTransfer() {
-
+    public List<Transfer> getTransferList(int accountId) {
+        List<Transfer> transferList = new ArrayList<>();
+        String sql = "SELECT * " +
+                "FROM transfer " +
+                "WHERE account_from = ? " +
+                "OR account_to = ?;";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql,accountId,accountId);
+        while (rowSet.next()) {
+            Transfer transfer = mapRowToTransfer(rowSet);
+            transferList.add(transfer);
+        }
+        return transferList;
     }
 
     public Transfer mapRowToTransfer(SqlRowSet rowSet){

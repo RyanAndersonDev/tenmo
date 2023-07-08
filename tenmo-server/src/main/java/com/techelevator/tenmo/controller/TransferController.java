@@ -7,6 +7,7 @@ import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.exception.BalanceException;
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDto;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 public class TransferController {
@@ -52,5 +54,13 @@ public class TransferController {
 
         // Add better exception handling later ??
         return true;
+    }
+
+    @RequestMapping(path = "/transfers", method = RequestMethod.GET)
+    public List<Transfer> listTransfers(Principal principal){
+        int principalUserId = userDao.findIdByUsername(principal.getName());
+        Account principalAccount = accountDao.getAccountByUserId(principalUserId);
+        int principalAccountId = principalAccount.getAccountId();
+        return transferDao.getTransferList(principalAccountId);
     }
 }
