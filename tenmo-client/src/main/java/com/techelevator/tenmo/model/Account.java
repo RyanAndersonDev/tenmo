@@ -14,6 +14,10 @@ public class Account {
         this.balance = balance;
     }
 
+    public int getAccountIdByUserId(int userId) {
+        return userId;
+    }
+
     public int getAccountId() {
         return accountId;
     }
