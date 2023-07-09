@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,16 +64,13 @@ public class TransferController {
         int principalAccountId = principalAccount.getAccountId();
         List<Transfer> transfers = transferDao.getTransferList(principalAccountId);
 
-        Map<String, Transfer> userNameTransferMap = new HashMap<>();
-
+        List<String> otherUsername = new ArrayList<>();
         for(Transfer transfer : transfers) {
             int otherAcctId = transferDao.getOtherAccountIdFromTransfer(principalAccountId, transfer);
-            String otherUsername = userDao.getUserByAccountId(otherAcctId).getUsername();
-
-            userNameTransferMap.put(otherUsername, transfer);
+            otherUsername.add(userDao.getUserByAccountId(otherAcctId).getUsername());
         }
 
-        return new TransferListResponseDto(principalAccountId, userNameTransferMap);
+        return new TransferListResponseDto(principalAccountId, otherUsername, transfers);
     }
 
     @RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
@@ -84,8 +82,6 @@ public class TransferController {
 
         int otherAcctId = transferDao.getOtherAccountIdFromTransfer(principalAccountId, pls);
         String otherUsername = userDao.getUserByAccountId(otherAcctId).getUsername();
-        Map<String, Transfer> map = new HashMap<>();
-        map.put(otherUsername, pls);
-        return new TransferListResponseDto(principalAccountId, map);
+        return new TransferListResponseDto(principalAccountId, otherUsername, pls);
     }
 }

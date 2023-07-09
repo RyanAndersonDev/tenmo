@@ -25,16 +25,17 @@ public class TransferService {
                 TransferListResponseDto.class).getBody();
 
         int currentAccountId = transferObject.getAccountId();
-        Map<String, Transfer> transfers = transferObject.getUserNameTransferMap();
+        List<String> otherUserNames = transferObject.getOtherUsernames();
+        List<Transfer> transfers = transferObject.getTransfers();
 
         System.out.println("-------------------------------------------");
         System.out.println("Transfers");
         System.out.println("ID          From/To                 Amount");
         System.out.println("-------------------------------------------");
 
-        for(Map.Entry<String, Transfer> entry : transfers.entrySet()) {
-            String username = entry.getKey();
-            Transfer transfer = entry.getValue();
+        for(int i =  0; i < transfers.size(); i++) {
+            String username = otherUserNames.get(i);
+            Transfer transfer = transfers.get(i);
 
             if(currentAccountId == transfer.getAccountFrom()) {
                 System.out.println(transfer.getTransferId() + "          To:" +
@@ -48,13 +49,12 @@ public class TransferService {
     }
 
     public void transferDetails(int transferId, AuthenticatedUser currentUser) {
-        TransferListResponseDto transferMap = restTemplate.exchange(baseUrl + "/transfers/" + transferId,
+        TransferListResponseDto transferObject = restTemplate.exchange(baseUrl + "/transfers/" + transferId,
                 HttpMethod.GET, makeAuthEntity(), TransferListResponseDto.class).getBody();
-        Map<String, Transfer> map = transferMap.getUserNameTransferMap();
-        Set<String> nameSet = map.keySet();
-        String extractedName = nameSet.iterator().next();
-        Transfer transfer = map.get(extractedName);
-        int currentAccountId = transferMap.getAccountId();
+
+        int currentAccountId = transferObject.getAccountId();
+        String otherName = transferObject.getOtherUsername();
+        Transfer transfer = transferObject.getTransfer();
 
         String type = "";
         String status = "";
@@ -73,7 +73,7 @@ public class TransferService {
                     "--------------------------------------------\n" +
                     "Id: " + transfer.getTransferId() + "\n" +
                     "From: " + currentUser.getUser().getUsername() + "\n" +
-                    "To: " + extractedName + "\n" +
+                    "To: " + otherName + "\n" +
                     "Type: " + type + "\n" +
                     "Status: " + status + "\n" +
                     "Amount: $" + transfer.getAmount() + "\n");
@@ -82,7 +82,7 @@ public class TransferService {
                     "Transfer Details\n" +
                     "--------------------------------------------\n" +
                     "Id: " + transfer.getTransferId() + "\n" +
-                    "From: " + extractedName + "\n" +
+                    "From: " + otherName + "\n" +
                     "To: " + currentUser.getUser().getUsername() + "\n" +
                     "Type: " + type + "\n" +
                     "Status: " + status + "\n" +
