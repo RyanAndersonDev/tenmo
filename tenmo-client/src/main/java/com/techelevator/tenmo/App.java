@@ -102,7 +102,9 @@ public class App {
 
 	private void viewTransferHistory() {
 		// TODO Auto-generated method stub
-		
+		transferService.listTransfers();
+        int transferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
+        transferService.transferDetails(transferId, currentUser);
 	}
 
 	private void viewPendingRequests() {

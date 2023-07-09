@@ -1,6 +1,8 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -60,6 +62,27 @@ public class JdbcTransferDao implements TransferDao{
             transferList.add(transfer);
         }
         return transferList;
+    }
+
+    public Transfer getTransferById(int transferId) {
+        Transfer returnTransfer = null;
+        String sql = "SELECT * " +
+                "FROM transfer " +
+                "WHERE transfer_id = ?;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferId);
+        while(results.next()) {
+            returnTransfer = mapRowToTransfer(results);
+        }
+        return returnTransfer;
+    }
+
+    public int getOtherAccountIdFromTransfer(int accountId, Transfer transfer) {
+        if(accountId == transfer.getAccountFrom()) {
+            return transfer.getAccountTo();
+        } else {
+            return transfer.getAccountFrom();
+        }
     }
 
     public Transfer mapRowToTransfer(SqlRowSet rowSet){
