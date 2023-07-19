@@ -58,6 +58,8 @@ public class TransferService {
 
         String type = "";
         String status = "";
+        String from = "";
+        String to = "";
 
         if(transfer.getTransferTypeId() == 2) {
             type = "Send";
@@ -68,27 +70,23 @@ public class TransferService {
         }
 
         if(currentAccountId == transfer.getAccountFrom()) {
-            System.out.println("--------------------------------------------\n" +
-                    "Transfer Details\n" +
-                    "--------------------------------------------\n" +
-                    "Id: " + transfer.getTransferId() + "\n" +
-                    "From: " + currentUser.getUser().getUsername() + "\n" +
-                    "To: " + otherName + "\n" +
-                    "Type: " + type + "\n" +
-                    "Status: " + status + "\n" +
-                    "Amount: $" + transfer.getAmount() + "\n");
+            from = currentUser.getUser().getUsername();
+            to = otherName;
         } else {
-            System.out.println("--------------------------------------------\n" +
-                    "Transfer Details\n" +
-                    "--------------------------------------------\n" +
-                    "Id: " + transfer.getTransferId() + "\n" +
-                    "From: " + otherName + "\n" +
-                    "To: " + currentUser.getUser().getUsername() + "\n" +
-                    "Type: " + type + "\n" +
-                    "Status: " + status + "\n" +
-                    "Amount: $" + transfer.getAmount() + "\n");
+            from = otherName;
+            to = currentUser.getUser().getUsername();
         }
-    }
+
+        System.out.println("--------------------------------------------\n" +
+                "Transfer Details\n" +
+                "--------------------------------------------\n" +
+                "Id: " + transfer.getTransferId() + "\n" +
+                "From: " + from + "\n" +
+                "To: " + to + "\n" +
+                "Type: " + type + "\n" +
+                "Status: " + status + "\n" +
+                "Amount: $" + transfer.getAmount() + "\n");
+        }
 
     public HttpEntity<TransferInput> makePayEntity(TransferInput transferInput) {
         HttpHeaders headers = new HttpHeaders();
